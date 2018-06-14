@@ -1,18 +1,18 @@
 units(length='cm', time='s', quantity='mol', act_energy='cal/mol')
 
-ideal_gas(name='air', elements="N", species="""Air""", reactions='all', transport='None', initial_state=state(temperature=300.0, pressure=OneAtm))
+ideal_gas(name='gas', elements="N", species="""Air""", reactions='None', transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
 
-stoichiometric_solid(name='KNO3', elements='K N O', species="""KNO3""", density=(2.109, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
+stoichiometric_solid(name='ox', elements='K N O', species="""KNO3""", density=(2.109, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
 
-stoichiometric_solid(name='S', elements='S', species="""S""", density=(1.96, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
+stoichiometric_solid(name='sulfur', elements='S', species="""S""", density=(1.96, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
 
-stoichiometric_solid(name='C', elements='C', species="""C""", density=(2.1, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
-
-ideal_interface(name='surface', elements='K N O S C', species="""KNO3 S C CO2 N2 K2S""", reactions='all', phases='KNO3-S-C-products-K2S', site_density=(1.0e15, 'molec/cm2'), initial_state=state(temperature=300.0, mass_fractions='KNO3:0.75 S:0.1 C:0.15 products:0 K2S:0'))
+stoichiometric_solid(name='carbon', elements='C', species="""C""", density=(2.1, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
 
 ideal_gas(name='products', elements="C O N", species="""CO2 N2""", reactions='all', transport='None', initial_state=state(temperature=300.0, pressure=OneAtm))
 
-stoichiometric_solid(name='K2S', elements='K S', species="""K2S""", density=(1.8, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
+stoichiometric_solid(name='potsulf', elements='K S', species="""K2S""", density=(1.8, 'g/cm3'), transport='None', initial_state=state(temperature=300.0, pressure=(1.0, 'atm')))
+
+ideal_interface(name='surface', elements='K N O S C', species="""KNO3 S C CO2 N2 K2S""", reactions='all', site_density=(1.0e15, 'molec/cm2'), phases='ox-sulfur-carbon-products-potsulf', initial_state=state(temperature=300.0, mass_fractions='KNO3:0.74 S:0.104 C:0.156 products:0 K2S:0'))
 
 #-------------------------------------------------------------------------------
 # Species data
@@ -30,8 +30,8 @@ species(name='KNO3',
                         4.715982020E-16, -3.513853220E+04, -4.804256439E+01])),
         note='Gurvich,1982 pt1 p409 pt2 p433. [tpis82]')
 
-species(name='C',
-        atoms='C:1',
+species(name="C",
+        atoms="C:1",
         thermo=(NASA9([200.00, 1000.00],
                       [ 6.495031470E+02, -9.649010860E-01,  2.504675479E+00,
                        -1.281448025E-05,  1.980133654E-08, -1.606144025E-11,
@@ -118,8 +118,5 @@ species(name='Air',
                         6.577800150E-16,  6.462263190E+03, -8.147411905E+00])),
         note='Mole%:N2 78.084,O2 20.9476,Ar .9365,CO2 .0319.Gordon,1982.Reac [g 9/95]')
 
-
-reaction( '2 KNO3 + S + 3 C <=> K2S + N2 + 3 CO2', [3.87000E+04, 2.7, 6260])
-
-
+surface_reaction( '2 KNO3 + S + 3 C <=> K2S + N2 + 3 CO2', Arrhenius(2.68E-10, 0.0, (13.6, 'kcal/mol')))
 
